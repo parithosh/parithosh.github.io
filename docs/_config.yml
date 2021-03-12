@@ -33,6 +33,7 @@ github_username:  jekyll
 header_pages:
   - index.md
   - about.md
+  - contact.md
 
 style: dark # dark (default), light or hacker
 
