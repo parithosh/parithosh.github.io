@@ -9,8 +9,10 @@ In this blogpost, we will look at deploying Loki, deploying Promtail and collect
 We will be deploying Loki as a docker container. 
 
 - Create a directory to store the config
-- Copy the loki configuration inside this folder called `loki-config.yml` with the below contents:
-```yaml
+- Copy the loki configuration inside this folder called `loki-config.yml` with the below contents:  
+
+
+```
 # Enables authentication through the X-Scope-OrgID header, which must be present
 # if true. If false, the OrgID will always be set to "fake".
 auth_enabled: false
@@ -95,8 +97,10 @@ ruler:
       store: inmemory
   enable_api: true
 ```
-- Run the docker container with the below command:
-```json
+- Run the docker container with the below command:  
+
+
+```
 docker run -d --name loki --restart unless-stopped -p 3100:3100 -v {{ loki_dir }}:/mnt/config grafana/loki:latest --config.file=/mnt/config/loki-config.yaml
 ```
 - Run `curl localhost:3100/ready` to check if the container is up as expected
@@ -113,8 +117,10 @@ system logs of the machine. These logs are then scraped as specified in the `scr
 Any extra labels can be added at this stage. 
 
 - Create a directory to store the config
-- Copy the promtail configuration inside this folder called `promtail-config.yml` with the below contents:
-```yaml
+- Copy the promtail configuration inside this folder called `promtail-config.yml` with the below contents:  
+
+
+```
 # speficies the promtail server ports
 server:
   http_listen_port:9080
@@ -138,8 +144,9 @@ scrape_configs:
           job: varlogs
           __path__: /var/log/*log
 ```
-- Run the docker container with the below command:
-```json
+- Run the docker container with the below command:  
+
+```
 docker run -d --name promtail --restart unless-stopped  -v {{ promtail_dir }}:/mnt/config -v /var/log:/var/log:ro grafana/promtail:2.2.1 --config.file=/mnt/config/promtail-config.yaml
 ```
 
@@ -154,8 +161,10 @@ all newly created containers will use the new log plugin.
 
 - Install the docker loki plugin with:  
 `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions`  
-- Either modify or create a file at `/etc/docker/daemon.json` with the following content. Add any extra `log-opts` if needed:
-```json
+- Either modify or create a file at `/etc/docker/daemon.json` with the following content. Add any extra `log-opts` if needed:  
+
+
+```
 {
   "debug" : true,
   "log-driver": "loki",
